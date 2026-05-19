@@ -9,7 +9,6 @@ USER="azureuser"
 GROUP="www-data"
 DOMAIN="codemos-services.co.in"
 EMAIL="admin@codemos-services.co.in"
-# =================================
 
 
 sudo apt update -y
