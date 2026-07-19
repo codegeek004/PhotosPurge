@@ -199,4 +199,4 @@ virtual/
 PhotoPurge/.DS_Store
 .DS_Store
 staticfiles/
-*/static/allauth_ui/output.css
+**/static/allauth_ui/output.css
