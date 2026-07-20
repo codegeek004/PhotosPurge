@@ -65,16 +65,17 @@ The main challenge is that Google's APIs rate-limit aggressively, access tokens 
 
 ## Installation
 
-Clone the repository and set up a virtual environment:
+Clone the repository and set up the environment using `uv`:
 
 ```bash
 git clone https://github.com/codegeek004/codemos-hackathon.git
 cd PhotosPurge
 
-python -m venv venv
-source venv/bin/activate       
+# Install uv (if you haven't already)
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-pip install -r requirements.txt
+# Sync dependencies (this creates .venv automatically)
+uv sync
 ```
 
 Apply database migrations:
