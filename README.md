@@ -244,11 +244,16 @@ Gmail tasks use a different path because credentials come from django-allauth's 
 
 Bug reports and pull requests are welcome. For significant changes, open an issue first to discuss what you want to change.
 
+### Git Workflow
+We use a strict review-based branching strategy:
+- All new features and bug fixes must target the **`review`** branch.
+- The `main` branch is strictly locked for direct contributions and is updated solely by the repository administrator from the `review` branch.
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'add your feature'`)
+3. Commit your changes (`git commit -m 'feat: add your feature'`)
 4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a pull request
+5. Open a Pull Request targeting the **`review`** branch.
 
 Please update tests where applicable.
 
