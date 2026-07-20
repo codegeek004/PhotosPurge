@@ -4,7 +4,7 @@
 set -e
 
 PROJECT_DIR="/home/azureuser/codemos-hackathon/PhotoPurge"
-VENV_DIR="${PROJECT_DIR}/venv"
+VENV_DIR="${PROJECT_DIR}/.venv"
 USER="azureuser"
 GROUP="www-data"
 DOMAIN="codemos-services.co.in"
@@ -15,13 +15,11 @@ sudo apt update -y
 sudo apt upgrade -y
 sudo apt install -y python3.11 python3.11-venv python3.11-dev nginx certbot python3-certbot-nginx
 
-python3.11 -m venv "${VENV_DIR}"
-source "${VENV_DIR}/bin/activate"
-pip install --upgrade pip
-pip install -r "${PROJECT_DIR}/requirements.txt"
-pip install gunicorn celery
+curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
 
 cd "${PROJECT_DIR}"
+uv sync --frozen --no-dev
 python manage.py collectstatic --noinput
 python manage.py migrate --noinput
 
@@ -76,8 +74,8 @@ After=network.target
 User=azureuser
 Group=www-data
 WorkingDirectory=/home/azureuser/codemos-hackathon/PhotoPurge
-Environment=\"PATH=/home/azureuser/codemos-hackathon/PhotoPurge/venv/bin\"
-ExecStart=/home/azureuser/codemos-hackathon/PhotoPurge/venv/bin/gunicorn \
+Environment=\"PATH=/home/azureuser/codemos-hackathon/PhotoPurge/.venv/bin\"
+ExecStart=/home/azureuser/codemos-hackathon/PhotoPurge/.venv/bin/gunicorn \
   --workers 2 \
   --bind 127.0.0.1:8000 \
   codegeeks.wsgi:application \
@@ -103,14 +101,14 @@ Type=forking
 User=azureuser
 Group=www-data
 WorkingDirectory=/home/azureuser/codemos-hackathon/PhotoPurge
-Environment=\"PATH=/home/azureuser/codemos-hackathon/PhotoPurge/venv/bin\"
-ExecStart=/home/azureuser/codemos-hackathon/PhotoPurge/venv/bin/celery \
+Environment=\"PATH=/home/azureuser/codemos-hackathon/PhotoPurge/.venv/bin\"
+ExecStart=/home/azureuser/codemos-hackathon/PhotoPurge/.venv/bin/celery \
   -A codegeeks worker \
   --loglevel=info \
   --logfile=/var/log/celery/worker.log \
   --pidfile=/var/run/celery/worker.pid \
   --detach
-ExecStop=/home/azureuser/codemos-hackathon/PhotoPurge/venv/bin/celery -A codegeeks control shutdown
+ExecStop=/home/azureuser/codemos-hackathon/PhotoPurge/.venv/bin/celery -A codegeeks control shutdown
 PIDFile=/var/run/celery/worker.pid
 StandardOutput=append:/var/log/celery/access.log
 StandardError=append:/var/log/celery/error.log
